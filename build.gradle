@@ -9,7 +9,7 @@ plugins {
 	id "eclipse"
 	id "idea"
 	id "maven-publish"
-	id "org.quiltmc.loom" version "1.1.+" apply false
+	id "org.quiltmc.loom" version "1.2.local" apply false
 	id "org.quiltmc.gradle.licenser" version "1.+"
 	id "net.kyori.indra.git" version "3.0.1"
 	id "com.matthewprenger.cursegradle" version "1.4.0"
@@ -370,7 +370,7 @@ configurations {
 	productionRuntime {
 		extendsFrom configurations.minecraftLibraries
 		extendsFrom configurations.loaderLibraries
-		extendsFrom configurations.minecraftRuntimeOnlyLibraries
+		extendsFrom configurations.minecraftRuntimeLibraries
 	}
 	productionRuntimeServer
 }
