@@ -313,7 +313,7 @@ javadoc {
 		charSet = "UTF-8"
 		memberLevel = JavadocMemberLevel.PACKAGE
 		links(
-				"https://maven.fabricmc.net/docs/yarn-${rootProject.minecraft_version}${project.yarn_version}/"
+			"https://maven.fabricmc.net/docs/yarn-${rootProject.minecraft_version}${project.yarn_version}/"
 		)
 		// Disable the crazy super-strict doclint tool in Java 8
 		addStringOption("Xdoclint:none", "-quiet")
@@ -579,19 +579,20 @@ sourceSets {
 
 // These modules are not included in the fat jar, maven will resolve them via the pom.
 def devOnlyModules = [
-		// "fabric-gametest-api-v1",
+	// "fabric-gametest-api-v1",
 ]
 
 configurations {
 	qsl
 }
+
 dependencies {
 	// Bundle all QSL modules
 	qsl modApi("org.quiltmc:qsl:${project.qsl_version}")
-	getAllQslModules().forEach {
-		include (it.getModuleGroup() + ":" + it.getModuleName() + ":" + it.getModuleVersion())
-	}
 	afterEvaluate {
+		getAllQslModules().forEach {
+			include "$it.moduleGroup:$it.moduleName:$it.moduleVersion"
+		}
 		subprojects.each {
 			if (it.name == "deprecated") return
 
@@ -605,15 +606,15 @@ dependencies {
 
 java.util.stream.Stream<ResolvedDependency> getAllQslModules() {
 // "it" is QSL
-	return configurations.getByName('qsl').resolvedConfiguration.getFirstLevelModuleDependencies().stream().flatMap {
-		it.getChildren().stream()
+	return configurations.named('qsl').get().resolvedConfiguration.firstLevelModuleDependencies.stream().flatMap {
+		it.children.stream()
 	}.flatMap {
 		// "it" is each QSL library
-		it.getChildren().stream()
+		it.children.stream()
 	}.filter {
 		// "it" is each QSL module
 		// this should only be QSL modules, but it can't hurt to filter out
-		if (it.getModuleGroup().startsWith('org.quiltmc.qsl') && it.getModuleGroup().split('\\.').length == 4) {
+		if (it.moduleGroup.startsWith('org.quiltmc.qsl') && it.moduleGroup.split('\\.').length == 4) {
 			return true
 		} else {
 			throw RuntimeException("Unexpected dependency: $it")
@@ -621,6 +622,7 @@ java.util.stream.Stream<ResolvedDependency> getAllQslModules() {
 	}
 
 }
+
 remapJar {
 	afterEvaluate {
 		subprojects.each {

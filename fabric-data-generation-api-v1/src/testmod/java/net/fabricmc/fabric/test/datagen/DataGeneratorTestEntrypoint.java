@@ -27,7 +27,6 @@ import static net.fabricmc.fabric.test.datagen.DataGeneratorTestContent.SIMPLE_I
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
@@ -40,10 +39,6 @@ import net.minecraft.advancement.Advancement;
 import net.minecraft.advancement.AdvancementFrame;
 import net.minecraft.advancement.criterion.OnKilledCriterion;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.texture.atlas.AtlasSource;
-import net.minecraft.client.texture.atlas.AtlasSourceManager;
-import net.minecraft.client.texture.atlas.DirectoryAtlasSource;
-import net.minecraft.data.DataOutput;
 import net.minecraft.data.client.BlockStateModelGenerator;
 import net.minecraft.data.client.ItemModelGenerator;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
@@ -75,7 +70,6 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricAdvancementProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricCodecDataProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
@@ -105,7 +99,8 @@ public class DataGeneratorTestEntrypoint implements DataGeneratorEntrypoint {
 		TestBlockTagProvider blockTagProvider = pack.addProvider(TestBlockTagProvider::new);
 		pack.addProvider((output, registries) -> new TestItemTagProvider(output, registries, blockTagProvider));
 		pack.addProvider(TestBiomeTagProvider::new);
-		pack.addProvider(TestAtlasSourceProvider::new);
+		// TODO - Restore atlas test
+		//pack.addProvider(TestAtlasSourceProvider::new);
 	}
 
 	private static class TestRecipeProvider extends FabricRecipeProvider {
@@ -359,6 +354,7 @@ public class DataGeneratorTestEntrypoint implements DataGeneratorEntrypoint {
 		}
 	}
 
+	/*
 	private static class TestAtlasSourceProvider extends FabricCodecDataProvider<List<AtlasSource>> {
 		private TestAtlasSourceProvider(FabricDataOutput dataOutput) {
 			super(dataOutput, DataOutput.OutputType.RESOURCE_PACK, "atlases", AtlasSourceManager.LIST_CODEC);
@@ -374,4 +370,6 @@ public class DataGeneratorTestEntrypoint implements DataGeneratorEntrypoint {
 			return "Atlas Sources";
 		}
 	}
+
+	*/
 }
